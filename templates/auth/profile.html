@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Trade Show Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-circle me-2"></i>
+                    My Profile
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                             style="width: 100px; height: 100px; font-size: 3rem;">
+                            {{ user.full_name[0] }}
+                        </div>
+                        <span class="badge bg-{{ 'success' if user.role == 'admin' else 'primary' if user.role == 'coordinator' else 'info' if user.role == 'accounting' else 'secondary' }} fs-6">
+                            {{ user.role.title() }}
+                        </span>
+                    </div>
+                    <div class="col-md-9">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th width="30%">Full Name:</th>
+                                <td>{{ user.full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Username:</th>
+                                <td>{{ user.username }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Role:</th>
+                                <td>{{ user.role.title() }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
+                                        {{ 'Active' if user.is_active else 'Inactive' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Member Since:</th>
+                                <td>{{ user.created_at.strftime('%B %d, %Y') }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p class="text-muted">
+                        Contact your administrator to update profile information or change your password.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

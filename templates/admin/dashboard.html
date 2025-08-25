@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Trade Show Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-6 fw-bold text-primary">
+            <i class="fas fa-cogs me-3"></i>
+            Admin Dashboard
+        </h1>
+        <p class="lead text-muted">System administration and user management</p>
+    </div>
+</div>
+
+<!-- System Statistics -->
+<div class="row mb-5">
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="stat-number">{{ total_users }}</div>
+            <div class="stat-label">Total Users</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="stat-number">{{ active_users }}</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="stat-number">{{ total_tradeshows }}</div>
+            <div class="stat-label">Trade Shows</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <div class="stat-number">${{ "{:,.0f}".format(total_expense_amount) }}</div>
+            <div class="stat-label">Total Expenses</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Admin Actions -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="fw-bold mb-4">
+            <i class="fas fa-tools me-2 text-warning"></i>
+            Quick Actions
+        </h3>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Create User</h5>
+                <p class="card-text text-muted">Add new coordinators, accounting staff, or attendees</p>
+                <a href="{{ url_for('admin.create_user') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Add User
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-building fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Manage Companies</h5>
+                <p class="card-text text-muted">Configure company settings and Zoho integration</p>
+                <a href="{{ url_for('admin.companies') }}" class="btn btn-success">
+                    <i class="fas fa-cog me-2"></i>Manage
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <i class="fas fa-list fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Expense Categories</h5>
+                <p class="card-text text-muted">Manage expense categories and classifications</p>
+                <a href="{{ url_for('admin.categories') }}" class="btn btn-info">
+                    <i class="fas fa-tags me-2"></i>Categories
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h4 class="mb-0 fw-bold">
+                    <i class="fas fa-users me-2 text-primary"></i>
+                    Recent Users
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if recent_users %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in recent_users %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                 style="width: 35px; height: 35px; font-size: 14px;">
+                                                {{ user.full_name[0] }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">{{ user.full_name }}</div>
+                                                <small class="text-muted">{{ user.email }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ user.role.title() }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
+                                            {{ 'Active' if user.is_active else 'Inactive' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            {{ user.created_at.strftime('%b %d, %Y') }}
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('admin.user_detail', id=user.id) }}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-3">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No users found</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-calendar-alt me-2 text-success"></i>
+                    Recent Trade Shows
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_tradeshows %}
+                    {% for tradeshow in recent_tradeshows %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="fw-bold">{{ tradeshow.name }}</div>
+                            <small class="text-muted">{{ tradeshow.location }}</small>
+                        </div>
+                        <span class="status-badge status-{{ tradeshow.status }}">
+                            {{ tradeshow.status.title() }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center">No trade shows yet</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                    System Health
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Database</span>
+                    <span class="badge bg-success">Online</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>File Storage</span>
+                    <span class="badge bg-success">Connected</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Zoho Integration</span>
+                    <span class="badge bg-warning">Setup Required</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>Email Service</span>
+                    <span class="badge bg-warning">Setup Required</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Trade Show Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0" style="margin-top: 5rem;">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                    <h2 class="fw-bold">Welcome Back</h2>
+                    <p class="text-muted">Sign in to your account</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">
+                            <i class="fas fa-user me-2"></i>Username
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="username" name="username" required
+                               style="border-radius: 15px; padding: 15px 20px;">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" required
+                               style="border-radius: 15px; padding: 15px 20px;">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </button>
+                </form>
+                
+                <div class="mt-4">
+                    <hr>
+                    <div class="text-center">
+                        <h6 class="text-muted mb-3">Demo Accounts</h6>
+                        <div class="row text-sm">
+                            <div class="col-12 mb-2">
+                                <div class="card bg-light">
+                                    <div class="card-body py-2">
+                                        <strong>Admin:</strong> admin / admin123
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            Use the admin account to set up coordinators, accounting staff, and attendees.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4 text-muted">
+            <small>
+                <i class="fas fa-shield-alt me-1"></i>
+                Secure expense tracking for trade shows
+            </small>
+        </div>
+    </div>
+</div>
+
+<style>
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.card {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+}
+</style>
+{% endblock %}
